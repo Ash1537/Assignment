@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Login</title>
+    <style>
+        .container{
+            width: 100%;
+            height: 100%;
+            background-color: #aaaaaa ;
+        }
+
+        .container .card{
+            width: 300px;
+            height: 50%;
+            background-color:white ;
+            margin: auto;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border-radius: 50px;
+        }
+        .container a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .container .form-control{
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            border-radius: 130px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Welcome To IHM </h2>
+            <br>
+            <form action="#">
+                <div class="form-group">
+
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                </div>
+                <div class="form-group">
+
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+                </div>
+                <div class="text-center">
+                    <button type="button" onclick="saveData()" class="btn btn-primary" id="save_btn">Login</button>
+                    
+                </div>
+                <p>New To IHM? <a href="registration.html" >Sign Up Now.</a></p>
+                
+            </form>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    function saveData(){
+        let email, password;
+        email=document.getElementById("email").value;
+        password=document.getElementById("password").value;
+
+        let user_record=new Array();
+        user_record=JSON.parse(localStorage.getItem("users"))?JSON.parse(localStorage.getItem("users")):[]
+        if(user_record.some((v)=>{
+            return v.email==email && v.password==password
+        })){
+            alert("Login Successfull")
+            let current_user=user_record.filter((v)=>{
+                return v.email==email && v.password==password
+            })[0]
+
+            localStorage.setItem("name", current_user.name);
+            localStorage.setItem("email", current_user.email);
+            window.location.href="home.html"
+        }
+        else{
+            alert("Login Fail")
+        }
+
+    }
+
+</script>
+
+
+</html>

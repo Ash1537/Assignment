@@ -1,0 +1,303 @@
+<!-- Activites -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>IHM</title>
+    <meta name="description" content="website description" />
+    <meta name="keywords" content="website keywords, website keywords" />
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <style>
+    /* #header
+{
+    background: #000;
+    border-bottom: 1px solid #3d3d3d;
+    height: 186px;
+} */
+      /* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+
+/* body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #fff;
+}  */
+
+ .container {
+  max-width: 1200px;
+  width: 95%;
+}
+
+.slider-wrapper {
+  position: relative;
+}
+.slider-wrapper .slide-button {
+  position: absolute;
+  top: 50%;
+  outline: none;
+  border: none;
+  height: 50px;
+  width: 50px;
+  z-index: 5;
+  color: #fff;
+  display: flex;
+  cursor: pointer;
+  font-size: 2.2rem;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  transform: translateY(-50%);
+}
+
+.slider-wrapper .slide-button:hover {
+  background: #404040;
+}
+
+.slider-wrapper .slide-button#prev-slide {
+  left: -0px;
+  display: none;
+}
+
+.slider-wrapper .slide-button#next-slide {
+  right: -25px;
+}
+
+.slider-wrapper .image-list {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 18px;
+  font-size: 0;
+  list-style: none;
+  margin-bottom: 30px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.slider-wrapper .image-list::-webkit-scrollbar {
+  display: none;
+}
+
+.slider-wrapper .image-list .image-item {
+  width: 325px;
+  height: 400px;
+  object-fit: cover;
+}
+
+.container .slider-scrollbar {
+  height: 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.slider-scrollbar .scrollbar-track {
+  background: #ccc;
+  width: 100%;
+  height: 2px;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  position: relative;
+}
+
+.slider-scrollbar:hover .scrollbar-track {
+  height: 4px;
+}
+
+.slider-scrollbar .scrollbar-thumb {
+  position: absolute;
+  background: #000;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  height: 100%;
+  cursor: grab;
+  border-radius: inherit;
+}
+
+.slider-scrollbar .scrollbar-thumb:active {
+  cursor: grabbing;
+  height: 8px;
+  top: -2px;
+}
+
+.slider-scrollbar .scrollbar-thumb::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10px;
+  bottom: -10px;
+} 
+    </style>
+    <script>
+      const initSlider = () => {
+    const imageList = document.querySelector(".slider-wrapper .image-list");
+    const slideButtons = document.querySelectorAll(".slider-wrapper .slide-button");
+    const sliderScrollbar = document.querySelector(".container .slider-scrollbar");
+    const scrollbarThumb = sliderScrollbar.querySelector(".scrollbar-thumb");
+    const maxScrollLeft = imageList.scrollWidth - imageList.clientWidth;
+    
+    // Handle scrollbar thumb drag
+    scrollbarThumb.addEventListener("mousedown", (e) => {
+        const startX = e.clientX;
+        const thumbPosition = scrollbarThumb.offsetLeft;
+        const maxThumbPosition = sliderScrollbar.getBoundingClientRect().width - scrollbarThumb.offsetWidth;
+        
+        // Update thumb position on mouse move
+        const handleMouseMove = (e) => {
+            const deltaX = e.clientX - startX;
+            const newThumbPosition = thumbPosition + deltaX;
+
+            // Ensure the scrollbar thumb stays within bounds
+            const boundedPosition = Math.max(0, Math.min(maxThumbPosition, newThumbPosition));
+            const scrollPosition = (boundedPosition / maxThumbPosition) * maxScrollLeft;
+            
+            scrollbarThumb.style.left = `${boundedPosition}px`;
+            imageList.scrollLeft = scrollPosition;
+        }
+
+        // Remove event listeners on mouse up
+        const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+        }
+
+        // Add event listeners for drag interaction
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+    });
+
+    // Slide images according to the slide button clicks
+    slideButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const direction = button.id === "prev-slide" ? -1 : 1;
+            const scrollAmount = imageList.clientWidth * direction;
+            imageList.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        });
+    });
+
+     // Show or hide slide buttons based on scroll position
+    const handleSlideButtons = () => {
+        slideButtons[0].style.display = imageList.scrollLeft <= 0 ? "none" : "flex";
+        slideButtons[1].style.display = imageList.scrollLeft >= maxScrollLeft ? "none" : "flex";
+    }
+
+    // Update scrollbar thumb position based on image scroll
+    const updateScrollThumbPosition = () => {
+        const scrollPosition = imageList.scrollLeft;
+        const thumbPosition = (scrollPosition / maxScrollLeft) * (sliderScrollbar.clientWidth - scrollbarThumb.offsetWidth);
+        scrollbarThumb.style.left = `${thumbPosition}px`;
+    }
+
+    // Call these two functions when image list scrolls
+    imageList.addEventListener("scroll", () => {
+        updateScrollThumbPosition();
+        handleSlideButtons();
+    });
+}
+
+window.addEventListener("resize", initSlider);
+window.addEventListener("load", initSlider);
+    </script>
+  </head>
+  <body>
+    <div id="main">
+      <div id="header">
+        <div id="logo">
+          <div id="logo_text">
+            <!-- class="logo_color", allows you to change the color of the text  -->
+            <h1>
+              <a href="home.html">IHM <span class="logo_colour">International Collage</span></a>
+            </h1>
+            <h2>"Let us be your Information Hub, the Bridge and the Global Platform to connect you to the world "</h2>
+          </div>
+        </div>
+        <div id="menubar">
+          <ul id="menu">
+            <!-- put class="selected" in the li tag for the selected page - to highlight whcih page you're on -->
+            <li ><a href="home.html">Home</a></li>
+            <li class="selected"><a href="examples.html">Activites</a></li>
+            <li><a href="page.html">Testimonials</a></li>
+            <!-- <li><a href="another_page.html">Another Page</a></li> -->
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div id="content_header"></div>
+      <div id="site_content">
+        <br>
+        <br>
+        <div class="container">
+          <div class="slider-wrapper">
+            <button id="prev-slide" class="slide-button material-symbols-rounded">
+              chevron_left
+            </button>
+            <ul class="image-list">
+              <img class="image-item" src="image1.jpg">
+              <img class="image-item" src="image2.jpg">
+              <img class="image-item" src="image3.jpg">
+              <img class="image-item" src="image4.jpg">
+              <img class="image-item" src="image5.jpg">
+            </ul>
+            <button id="next-slide" class="slide-button material-symbols-rounded">
+              chevron_right
+            </button>
+          </div>
+          <div class="slider-scrollbar">
+            <div class="scrollbar-track">
+              <div class="scrollbar-thumb"></div>
+            </div>
+          </div>
+        </div>
+        <div id="sidebar_container">
+          
+          
+          
+          </div>
+          <div id="content" style="width: 880px; text-align: justify;">
+            <!-- insert the page content here -->
+            <h1>Empowering Education: Student-Driven Activities at Our School</h1>
+            
+            <p>
+              At IHM, we champion the principle of student agency, allowing learners to steer their educational journey towards their passions and interests. Through a diverse array of offerings spanning sports, arts, academic clubs, and community service initiatives, we empower students to take ownership of their extracurricular pursuits. Whether it's delving into debate to sharpen critical thinking skills or immersing themselves in music to foster creativity, our students are encouraged to explore avenues that resonate with their aspirations and values.
+            </p>
+            <p>
+              As founders, we're committed to providing the necessary support and guidance to facilitate these student-driven initiatives. Our dedicated faculty stand ready to mentor and nurture each student's journey, ensuring they have the resources and encouragement needed to flourish. Through this collaborative approach, we not only cultivate well-rounded individuals but also foster a vibrant culture of creativity, collaboration, and personal growth within our school community.
+            </p>
+            <h2>Exploring the Benefits</h2>
+            <ul>
+              <li>Allowing students to choose their activities fosters a sense of ownership and investment in their education.</li>
+              <li>By making choices about their extracurricular pursuits, students learn to manage their time and commitments effectively.</li>
+              <li>Engaging in activities of their choosing enables students to explore their interests, passions, and talents, leading to holistic development.</li>
+            </ul>
+          </div>
+        </div>
+        <div id="content_footer"></div>
+        <div id="footer">
+          <p>
+            <a href="home.html">Home</a>|
+            <a href="examples.html">Activites</a> |
+            <a href="page.html">Testimonials</a> |
+            <!-- <a href="another_page.html">Another Page</a> | -->
+            <a href="contact.html">Contact Us</a>
+          </p>
+          <p>
+            Copyright &copy; simplestyle_horizon |
+            <a href="http://validator.w3.org/check?uri=referer">HTML5</a>|
+            <a href="htt://jigsaw.w3.org/css-validator/check/refereer">CSS</a>|
+            <a href="http://www/HTML5webtemplates.co.uk">Simple web templates by HTMl5</a>
+          </p>
+        </div>
+      </div>
+  </body>
+</html>
